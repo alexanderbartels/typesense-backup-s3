@@ -1,5 +1,8 @@
 #! /bin/sh
 
+# TODO: rewrite to typesense backup restore logic
+# see: https://typesense.org/docs/guide/backups.html#restore-steps
+
 set -u # `-e` omitted intentionally, but i can't remember why exactly :'(
 set -o pipefail
 
