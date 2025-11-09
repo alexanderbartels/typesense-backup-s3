@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - { typesense: 29, alpine: '´3.21' }
+          - { typesense: 29, alpine: '3.21' }
 
     steps:
       - name: Checkout repository
