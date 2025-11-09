@@ -1,0 +1,30 @@
+# this file is here to facilitate development/testing
+# $ docker compose up -d --build --force-recreate
+
+services:
+  typesense:
+    image: typesense/typesense:29.0
+    restart: on-failure
+    ports:
+      - "8108:8108"
+    volumes:
+      - ./typesense-data:/data
+    command: '--data-dir /data --api-key=secure-api-key --enable-cors'
+
+
+  backup:
+    build:
+      context: .
+      args:
+        ALPINE_VERSION: '3.16'
+    environment:
+      SCHEDULE: '@weekly'     # optional
+      BACKUP_KEEP_DAYS: 7     # optional
+      PASSPHRASE: passphrase  # optional
+      S3_REGION:
+      S3_ACCESS_KEY_ID:
+      S3_SECRET_ACCESS_KEY:
+      S3_BUCKET:
+      S3_PREFIX: backup
+      TYPESENSE_HOST: postgres
+      TYPESENSE_API_KEY: secure-api-key
