@@ -24,5 +24,6 @@ ADD src/run.sh run.sh
 ADD src/env.sh env.sh
 ADD src/backup.sh backup.sh
 ADD src/restore.sh restore.sh
+ADD src/delete.sh delete.sh
 
 CMD ["sh", "run.sh"]
