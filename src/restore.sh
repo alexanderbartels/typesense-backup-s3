@@ -31,8 +31,19 @@ else
 fi
 
 if [ $# -eq 1 ]; then
-  timestamp="$1"
-  key_suffix="${TYPESENSE_HOST}_${timestamp}${file_type}"
+  backup_arg="$1"
+  
+  # Check if argument is a full filename (contains the host and ends with extension)
+  if echo "$backup_arg" | grep -q "\.dump"; then
+    # It's a full filename, use as is
+    key_suffix="$backup_arg"
+  elif echo "$backup_arg" | grep -q "^${TYPESENSE_HOST}_"; then
+    # It's a filename without extension (host_timestamp)
+    key_suffix="${backup_arg}${file_type}"
+  else
+    # It's just a timestamp, prepend the host
+    key_suffix="${TYPESENSE_HOST}_${backup_arg}${file_type}"
+  fi
 else
   echo "Finding latest backup..."
   key_suffix=$(
@@ -49,8 +60,24 @@ else
   fi
 fi
 
+echo "Using backup file: ${key_suffix}"
+echo "Full S3 path: ${s3_uri_base}/${key_suffix}"
+
+# Check if the backup exists in S3 before attempting to download
+echo "Checking if backup exists in S3..."
+if ! aws $aws_args s3 ls "${s3_uri_base}/${key_suffix}" > /dev/null 2>&1; then
+  echo "ERROR: Backup file not found in S3: ${s3_uri_base}/${key_suffix}"
+  echo ""
+  echo "Available backups for ${TYPESENSE_HOST}:"
+  aws $aws_args s3 ls "${s3_uri_base}/" | grep "${TYPESENSE_HOST}_" || echo "  (none found)"
+  exit 1
+fi
+
 echo "Fetching backup from S3..."
-aws $aws_args s3 cp "${s3_uri_base}/${key_suffix}" "backup${file_type}"
+if ! aws $aws_args s3 cp "${s3_uri_base}/${key_suffix}" "backup${file_type}"; then
+  echo "ERROR: Failed to download backup from S3"
+  exit 1
+fi
 
 if [ -n "$PASSPHRASE" ]; then
   echo "Decrypting backup..."
