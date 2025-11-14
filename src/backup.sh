@@ -9,6 +9,11 @@ source ./env.sh
 # since Typesense might have open files that it's writing to, 
 # as the backup is being taken. Instead, we will use the snapshot API to create a backup.
 # see https://typesense.org/docs/guide/backups.html
+echo "Starting backup of $TYPESENSE_HOST database..."
+
+echo "Ensure tmp backup directory is empty..."
+rm -rf /tmp/typesense-data-snapshot/*
+
 echo "Creating backup of $TYPESENSE_HOST database..."
 curl "http://$TYPESENSE_HOST:$TYPESENSE_PORT/operations/snapshot?snapshot_path=/tmp/typesense-data-snapshot" \
   -X POST \
