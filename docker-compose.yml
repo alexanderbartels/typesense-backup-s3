@@ -28,3 +28,4 @@ services:
       S3_PREFIX: backup
       TYPESENSE_HOST: postgres
       TYPESENSE_API_KEY: secure-api-key
+      TYPESENSE_DATA_DIR: "/data"

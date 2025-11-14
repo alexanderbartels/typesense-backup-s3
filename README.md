@@ -2,7 +2,6 @@
 
 This project provides Docker images to periodically back up a typesense snapshot to AWS S3, and to restore from the backup as needed.
 
-
 # Usage
 ## Backup
 ```yaml
@@ -41,10 +40,13 @@ services:
 
 ## Restore
 > [!CAUTION]
-> DATA LOSS! All database objects will be dropped and re-created.
+> DATA LOSS! All database objects will be dropped and re-created. Therefore the Typesense project must be stopped and the complete data directory must be cleared.
+
+
 
 ### ... from latest backup
 ```sh
+docker exec <container name> sh delete.sh # delete data dir
 docker exec <container name> sh restore.sh
 ```
 
@@ -53,6 +55,7 @@ docker exec <container name> sh restore.sh
 
 ### ... from specific backup
 ```sh
+docker exec <container name> sh delete.sh # delete data dir
 docker exec <container name> sh restore.sh <timestamp>
 ```
 
@@ -71,3 +74,6 @@ docker compose up -d
 
 # Acknowledgements
 This project is inspired by the [postgres-backup-s3](https://github.com/schickling/dockerfiles/tree/master/postgres-backup-s3) utility from @schickling, of which i maintain [my own fork](https://github.com/alexanderbartels/postgres-backup-s3). 
+
+## AI-Usage Transparency
+Parts of this project have been created with the help of ai coding agents.
