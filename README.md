@@ -2,6 +2,12 @@
 
 This project provides Docker images to periodically back up a typesense snapshot to AWS S3, and to restore from the backup as needed.
 
+## Related Article
+
+I built this for my project [oscar-whiskey.com](https://oscar-whiskey.com) and documented the full setup in a short Medium post:
+
+👉 [Building the Search Infrastructure for Oscar Whiskey with Typesense, Kamal, and Automated Backups to S3](https://medium.com/@BartelsXander/building-the-search-infrastructure-for-oscar-whiskey-with-typesense-kamal-and-automated-backups-aa4f7a53d3e1)
+
 # Usage
 ## Backup
 ```yaml
